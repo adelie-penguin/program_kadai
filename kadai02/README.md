@@ -11,3 +11,5 @@
 | mpi.c | MPIで並列処理 |
 | openmp.c |  |
 | makefile | cuda2.cuのみをコンパイル可能 |
+
+※makefileは研究室のwss11～wss15環境以外だと正しく動作しませんので注意してください
