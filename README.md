@@ -6,7 +6,7 @@
 
 ## プログラムファイルのダウンロード
 
-下記のgitコマンドを使うか、ブラウザ機能を利用してcalc.cを保存してください。
+下記のgitコマンドを使うか、ブラウザ機能を利用してファイルを保存してください。
 ```
 git clone https://github.com/adelie-penguin/program_kadai
 ```
