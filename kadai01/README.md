@@ -23,7 +23,6 @@ git clone https://github.com/adelie-penguin/program_kadai
 ### コンパイルコマンド
 
 コンパイルオプションは特に必要ありません。  
-kadai01ディレクトリ内で下記コマンドを実行しましょう。  
 必要に応じて最適化オプション「-O3」を追加してください。
 ```
 gcc calc.c
