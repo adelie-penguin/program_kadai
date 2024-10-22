@@ -8,7 +8,6 @@
 
 SRC = cuda2
 CFLAGS=
-LDFLAGS=
 CFLAG=
 
 #--[ 設定反映 ]-----------------------------
@@ -36,7 +35,7 @@ endif
 
 #========================
 cuda2 : $(SRC).cu
-	nvcc -o $@ $< $(CFLAG) $(GFLAG) $(LDFLAGS)
+	nvcc -o $@ $< $(CFLAG) $(GFLAG) 
 
 #========================
 %.cu: %.c
