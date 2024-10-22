@@ -1,3 +1,12 @@
-kadai01 連立方程式Ax=bの求解
+# penguin_kadai
 
-kadai02 並列実行プログラムの例
+
+- kadai01 : 連立方程式Ax=bの求解
+- kadai02 : 並列実行のおためしプログラム
+
+## プログラムファイルのダウンロード
+
+下記のgitコマンドを使うか、ブラウザ機能を利用してcalc.cを保存してください。
+```
+git clone https://github.com/adelie-penguin/program_kadai
+```
