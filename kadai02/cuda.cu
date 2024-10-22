@@ -1,41 +1,95 @@
-/* vim: set tabstop=4 : */
-/****************************************************************************
- * cuda のおためしプログラム
- *----------------------------------------------------------------------
+/* vim: set tabstop=4 foldmethod=marker : */
+/************************************************
  *
- * コンパイルコマンド
- * $make
- * 実行コマンド
- * $./a.out 
+ * CUDA実験してもらう用プログラム
  *
- ****************************************************************************/
+ *-----------------------------------------------
+ *
+ *  コンパイルコマンド
+ *   $nvcc -o test cuda.cu
+ *
+ *  実行コマンド
+ *   $./test
+ *
+ ************************************************/
+
 #include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
-/* CUDAが無効な状態でも実行したい場合はこのifdefに代替コードを記述 */
-#ifdef __CUDACC__
 #include<cuda_runtime.h>
-#define penguin_print()	fprintf(stdout, ">> with cuda\n")
-#else
-#define penguin_print()	fprintf(stdout, ">> without cuda\n")
-#endif
-/*------------*/
 
-#define BLOCK_MAX 	2	/* スレッドブロック数 */
-#define BLOCK_SIZE  4	/* スレッド数 */
+#define ThreadMax (10)
+#define MallSize  ((ThreadMax) * sizeof(int))
 
-void* function(void*);
-
-int main(int argc, char *argv[])
+/*==============================================*/
+/* GPUで実行する関数                            */
+/*----------------------------------------------*/
+/* ※シェアードメモリをわざと経由                */
+/*==============================================*/
+__global__ void test_asemble(int *g_data, int num)
 {
-	penguin_print();
-	function<<<BLOCK_MAX, BLOCK_SIZE>>>("hello cuda!");
-	cudaDeviceReset();
-	return(0);
+	int idx = threadIdx.x;      /* レジスタ変数(スレッドIDの取得)           */
+	__shared__ int  s_data;     /* シェアード変数                           */
+
+	s_data      = g_data[idx];  /* グローバルメモリからシェアードにコピー   */
+	s_data     += idx * num;
+	g_data[idx] = s_data;       /* グローバルメモリへの書き戻し             */
+
+	return;
 }
 
-__global__ void function(char *m)
+/************************************************/
+/* main関数(CPUで実行)                          */
+/************************************************/
+int main(int argc, char *argv[])
 {
-	printf(">> block%d thread%d %s", blockIdx.x, threadIdx.x, m);
+	int i;
+	int *c_array   = NULL;  /* CPU側の配列 */
+	int *g_array   = NULL;  /* GPU側の配列 */
+	int thread_max = 10;
+	int grid_max   = 1;
+
+
+	/*--[スレッド数とブロック数を決める]-------*/
+
+	dim3 grid(grid_max);            /* スレッドブロックの個数を指定         */
+	dim3 block(thread_max);         /* スレブロのサイズ(スレッド数)を指定   */
+
+
+	/*--[CPU側のメモリ確保]--------------------*/
+
+	c_array = (int*)malloc(thread_max * sizeof(int));   /* CPU上にメモリ確保 */
+
+	for(int i = 0; i < thread_max; i++)           
+	{
+		c_array[i] = 0;     /* 配列初期化 */
+	}
+
+	/*--[CUDA側のメモリ確保]-------------------*/
+
+	/* GPU上にメモリ確保        */
+	cudaMalloc((int**)&g_array, MallSize);
+
+	/* CPUの配列をGPUにコピー   */
+	cudaMemcpy(g_array, c_array, MallSize, cudaMemcpyHostToDevice);
+
+
+	/*--[GPUのカーネル起動]--------------------*/
+
+	test_asemble<<<grid, block>>>(g_array, 10);
+
+
+	/*--[仕事結果の回収]-----------------------*/
+
+	/* GPUの配列をCPUにコピー   */
+	cudaMemcpy(c_array, g_array, MallSize, cudaMemcpyDeviceToHost);
+
+	/* 表示 */
+	for(i = 0; i < thread_max; i++)
+	{
+		fprintf(stdout, "c_array[%d]=%d\n", i, c_array[i]);
+	}
+
+	cudaFree(g_array);
+	free(c_array);
+	cudaDeviceReset(); /* デバイスリセット */
+	return(0);
 }
