@@ -37,5 +37,5 @@ int main(int argc, char *argv[])
 
 __global__ void function(void)
 {
-	printf(">> block%d thread%d %s", blockIdx.x, threadIdx.x, m);
+	printf(">> block%d thread%d %s", blockIdx.x, threadIdx.x);
 }
