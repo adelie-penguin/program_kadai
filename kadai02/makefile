@@ -6,18 +6,19 @@
 # 
 #*******************************************
 
-SRC = cuda2
-CFLAGS=
+SRC  = cuda2
 CFLAG=
 
-#--[ 設定反映 ]-----------------------------
+#--[ コンパイルオプションの設定 ]-----------------------
+
 HOST_NAME = $(shell hostname)
 CFLAG += -lm -O3
 #CFLAG += -g -G
 #CFLAG += -pthread
 #CFLAG += -fopenmp
 
-# deviceからprint関数を利用するためのオプション
+#--[ deviceからprint関数を利用するためのオプション ]----
+
 GFLAG = -arch=sm_53 --ptxas-options=-v
 
 ifeq ($(HOST_NAME), wss11)
