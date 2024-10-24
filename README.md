@@ -8,5 +8,5 @@
 
 下記のgitコマンドを使うか、ブラウザ機能を利用してファイルを保存してください。
 ```
-git clone https://github.com/adelie-penguin/program_kadai
+git clone --depth=1 https://github.com/adelie-penguin/program_kadai
 ```
