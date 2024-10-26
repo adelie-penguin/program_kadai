@@ -1,4 +1,4 @@
-# penguin_kadai
+# program_kadai
 
 
 - kadai01 : 連立方程式Ax=bの求解
@@ -6,7 +6,7 @@
 
 ## プログラムファイルのダウンロード
 
-下記のgitコマンドを使うか、ブラウザ機能を利用してファイルを保存してください。
+下記のgitコマンドかブラウザ機能を利用してファイルを保存してください．
 ```
 git clone --depth=1 https://github.com/adelie-penguin/program_kadai
 ```
