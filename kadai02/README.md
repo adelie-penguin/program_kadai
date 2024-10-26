@@ -4,7 +4,7 @@
 
 | ファイル名 | 機能 |
 ----|---- 
-| cuda01.cu | CUDAで並列処理 |
+| cuda01.cu | CUDAで並列処理(makefileでコンパイル可能) |
 | cuda02.cu | CUDAで並列処理(CPU-GPU間のデータ転送あり) |
 | mpi.c | MPIで並列処理 |
 | openmp.c | OpenMPで並列処理 |
@@ -29,7 +29,7 @@ $(SRC) : $(SRC).cu
 ```
 `$@`や`$<`はmakefile特有の構文です．上の行にある`:`前後の内容で置き換えられます．  
 配布したmakefileは10行目で`SRC = cuda01`と定義します．
-このため，wss15でmakeすると，下記のコマンドが実行されます．
+このため，wss15でmakeすると下記のコマンドが実行されます．
 ```
   nvcc -o cuda01 cuda01.cu -lm -O3 -arch=sm_70 --ptxas-options=-v
 ```
