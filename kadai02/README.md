@@ -9,7 +9,7 @@
 | mpi.c | MPIで並列処理 |
 | openmp.c | OpenMPで並列処理 |
 | pthread.c | pthreadで並列処理 |
-| python01.y | pythonプログラム(Poolでプロセスを生成) |
+| python01.py | pythonプログラム(Poolでプロセスを生成) |
 | makefile | 配布段階ではcuda01.cuのみをコンパイル可能 |
 
 
