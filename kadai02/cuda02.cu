@@ -58,7 +58,7 @@ int main(int argc, char *argv[])
 
 	/*--[CPU側のメモリ確保]--------------------*/
 
-	c_array = (int*)malloc(thread_max * sizeof(int));   /* CPU上にメモリ確保 */
+	c_array = (int*)malloc(MallSize);   /* CPU上にメモリ確保 */
 
 	for(int i = 0; i < thread_max; i++)           
 	{
