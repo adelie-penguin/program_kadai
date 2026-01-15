@@ -73,13 +73,13 @@ void show_matrix(double **A, double *b, int size)
 /*==========================================================*/
 /* 時間測定用 												*/
 /*==========================================================*/
-#ifdef ___WIN
+#if defined(___WIN)
 typedef time_t time_data;
 #define TIME_SET_START()	stime = clock()
 #define TIME_PRINT()	etime = clock();							\
 								fprintf(stdout, ">> 実行時間 %f[ms]\n", 		\
 								(float)(etime - stime) * 1000.0/ CLOCKS_PER_SEC)
-#else
+#elif defined(___GETTIMEOFDAY)
 #include<sys/time.h>
 typedef struct timeval time_data;
 #define TIME_SET_START()	gettimeofday(&stime, NULL);
@@ -87,6 +87,13 @@ typedef struct timeval time_data;
 	fprintf(stdout, ">> 実行時間 %f[ms]\n", 		\
 			(etime.tv_sec-stime.tv_sec) * 1000.0 + 	\
 			(etime.tv_usec-stime.tv_usec) * 0.001)
+#else
+typedef struct timespec time_data;
+#define TIME_SET_START()	clock_gettime(CLOCK_REALTIME, &stime);
+#define TIME_PRINT()	clock_gettime(CLOCK_REALTIME, &etime);					\
+	fprintf(stdout, ">> 実行時間 %f[ms]\n", 		\
+			(etime.tv_sec-stime.tv_sec) * 1000.0 + 	\
+			(etime.tv_nsec-stime.tv_nsec) * 0.000001)
 #endif
 
 
@@ -107,13 +114,12 @@ int main(int argc, char *argv[])
 	{
 		size = atoi(argv[1]);
 	}
-
 	if(size <= 0)
 	{
 		fprintf(stderr, ">> (line%d) argument[1] is matrix size.\n", __LINE__);
 		exit(1);
 	}
-
+	
 	if((b = (double*)malloc(sizeof(double) * size)) == NULL)
 	{
 		fprintf(stderr, ">> line%d malloc error.\n", __LINE__);
@@ -151,5 +157,6 @@ int main(int argc, char *argv[])
 
 	free(A[0]);
 	free(A);
+	free(b);
 	return(0);
 }
