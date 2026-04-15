@@ -19,21 +19,7 @@ CFLAG += -lm -O3
 
 #--[ deviceからprint関数を利用するためのオプション ]----
 
-HOST_NAME = $(shell hostname)
-GFLAG = -arch=sm_53 --ptxas-options=-v
-
-ifeq ($(HOST_NAME), wss11)
-	GFLAG = -arch=sm_61 --ptxas-options=-v
-endif
-ifeq ($(HOST_NAME), wss12)
-	GFLAG = -arch=sm_61 --ptxas-options=-v
-endif
-ifeq ($(HOST_NAME), wss14)
-	GFLAG = -arch=sm_86 --ptxas-options=-v
-endif
-ifeq ($(HOST_NAME), wss15)
-	GFLAG = -arch=sm_70 --ptxas-options=-v
-endif
+GFLAG = -arch=native --ptxas-options=-v
 
 #========================
 
