@@ -1,7 +1,8 @@
 /* vim: set tabstop=4 : */
 /****************************************************************************
  *
- * 連立一次方程式の求解(デバッグ用)
+ * 三角行列を係数とする連立一次方程式の求解
+ * (前進代入・後退代入のデバッグ用)
  *
  *---------------------------------------------------------------------------
  *
@@ -90,37 +91,16 @@ void show_matrix(double **A, double *bL, double *bU, int size)
 }
 
 /*==========================================================*/
-/* 時間測定用 												*/
-/*==========================================================*/
-#ifdef ___WIN
-typedef time_t time_data;
-#define TIME_SET_START()	stime = clock()
-#define TIME_PRINT()	etime = clock();							\
-								fprintf(stdout, ">> 実行時間 %f[ms]\n", 		\
-										(float)(etime - stime) * 1000.0/ CLOCKS_PER_SEC)
-#else
-#include<sys/time.h>
-typedef struct timeval time_data;
-#define TIME_SET_START()	gettimeofday(&stime, NULL);
-#define TIME_PRINT()	gettimeofday(&etime, NULL);					\
-	fprintf(stdout, ">> 実行時間 %f[ms]\n", 		\
-			(etime.tv_sec-stime.tv_sec) * 1000.0 + 	\
-			(etime.tv_usec-stime.tv_usec) * 0.001)
-#endif
-
-
-/*==========================================================*/
 /* メイン関数 												*/
 /*==========================================================*/
 int main(int argc, char *argv[])
 {
 	int i; 
 	double **A;				/* 係数行列 */
-	double *bL, *bU;				/* 定数ベクトル */
+	double *bL, *bU;		/* 定数ベクトル */
 	int size = 10;			/* 行列サイズ */
 
-	time_data stime, etime;	/* 時間測定用の変数定義 */
-	double errU, errL;				/* 計算誤差 */
+	double errU, errL;		/* 計算誤差 */
 
 	if(argc == 2)
 	{
@@ -161,10 +141,9 @@ int main(int argc, char *argv[])
 	srand(time(NULL));
 	set_matrix(A, bL, bU, size);
 	show_matrix(A, bL, bU, size);
-	TIME_SET_START();
+
 	calc_matrix_L(A, bL, size);
 	calc_matrix_U(A, bU, size);
-	TIME_PRINT(); 
 
 	errL = 0.0;
 	errU = 0.0;
@@ -179,5 +158,7 @@ int main(int argc, char *argv[])
 
 	free(A[0]);
 	free(A);
+	free(bL);
+	free(bU);
 	return(0);
 }
